@@ -95,6 +95,13 @@ class TenantSettlement(BaseModel):
     @property
     def balance_pln(self) -> float:
         return self.transfers_pln - self.rent_pln - self.bills_pln
+class ApartmentSettlement(BaseModel):
+    apart: str
+    year: int
+    month: int
+    total_bills_pln: float
+    total_rent_pln: float
+    total_due_pln: float
 
 
 class Manager:
