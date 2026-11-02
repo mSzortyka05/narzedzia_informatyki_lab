@@ -83,6 +83,18 @@ class Bill(BaseModel):
         return [Bill(**bill) for bill in data]
 
 
+class TenantSettlement(BaseModel):
+    tenant: str
+    settlement_year: int
+    settlement_month: int
+    apartment: str
+    rent_pln: float
+    bills_pln: float
+    transfers_pln: float
+
+    @property
+    def balance_pln(self) -> float:
+        return self.transfers_pln - self.rent_pln - self.bills_pln
 class ApartmentSettlement(BaseModel):
     apart: str
     year: int
