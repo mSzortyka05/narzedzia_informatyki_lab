@@ -126,7 +126,8 @@ if __name__ == '__main__':
     parameters = Parameters()
     manager = Manager(parameters)
 
-    print('=== MIESZKANIA ===')
+
+        print('=== MIESZKANIA ===')
     for apartment in manager.apartments.values():
         print(f'\n{apartment.name} ({apartment.key})')
         print(f'  Adres: {apartment.location}')
@@ -136,10 +137,13 @@ if __name__ == '__main__':
         for room in apartment.rooms.values():
             print(f'    - {room.name}: {room.area_m2:.2f} m2')
 
+        bills = [bill for bill in manager.bills if bill.apartment == apartment.key]
         print('  Rachunki:')
-        for bill in manager.bills:
-            if bill.apartment == apartment.key:
-                print(f'    - {bill.type}: {bill.amount_pln:.2f} PLN, okres: {bill.settlement_month}/{bill.settlement_year}, termin: {bill.date_due}')
+        if bills:
+            for bill in bills:
+                print(f'    - {bill.type}: {bill.amount_pln:.2f} PLN, okres: {bill.settlement_month:02d}/{bill.settlement_year}, termin: {bill.date_due}')
+        else:
+            print('    - brak')
 
     print('\n=== NAJEMCY ===')
     for tenant in manager.tenants.values():
@@ -148,7 +152,15 @@ if __name__ == '__main__':
         print(f'  Czynsz: {tenant.rent_pln:.2f} PLN, kaucja: {tenant.deposit_pln:.2f} PLN')
         print(f'  Umowa: {tenant.date_agreement_from} - {tenant.date_agreement_to}')
 
+        transfers = [transfer for transfer in manager.transfers if transfer.tenant == tenant.name]
         print('  Przelewy:')
-        for transfer in manager.transfers:
-            if transfer.tenant == tenant.name:
-                print(f'    - {transfer.amount_pln:.2f} PLN, data: {transfer.date}, okres: {transfer.settlement_month}/{transfer.settlement_year}')
+        if transfers:
+            for transfer in transfers:
+                if transfer.settlement_month is not None and transfer.settlement_year is not None:
+                    period = f'{transfer.settlement_month:02d}/{transfer.settlement_year}'
+                else:
+                    period = 'nie określono'
+                print(f'    - {transfer.amount_pln:.2f} PLN, data: {transfer.date}, okres: {period}')
+        else:
+            print('    - brak')
+
