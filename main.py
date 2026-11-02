@@ -84,7 +84,7 @@ class Bill(BaseModel):
 
 
 class ApartmentSettlement(BaseModel):
-    apartment: str
+    apart: str
     year: int
     month: int
     total_bills_pln: float
